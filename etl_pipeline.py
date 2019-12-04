@@ -1,6 +1,7 @@
 import pandas as pd
 from sqlalchemy import create_engine
 
+#load data
 messages = pd.read_csv("messages.csv")
 categories = pd.read_csv("categories.csv")
 
@@ -32,3 +33,4 @@ df.drop_duplicates(inplace=True)
 #save the clean dataset to sqlite database
 engine = create_engine('sqlite:///InsertDatabaseName.db')
 df.to_sql('InsertTableName', engine, index=False)
+

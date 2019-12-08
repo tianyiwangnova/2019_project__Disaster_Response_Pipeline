@@ -24,6 +24,11 @@ for column in categories:
     # convert column from string to numeric
     categories[column] = categories[column].astype(str)
 
+#some column(s) have more than one unique values; we want to change that
+col_more_unique_values = list(categories.columns[categories.describe().loc['unique'] > 2])
+for column in col_more_unique_values:
+    categories[column] = categories[column].apply(lambda x: 1 if int(x) > 0 else 0)
+
 #replace category column with the new category columns
 df = df.drop('categories', axis=1).join(categories)
 

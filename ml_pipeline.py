@@ -1,43 +1,16 @@
-# import libraries
-import datetime
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-
-import re
-import nltk
-nltk.download('punkt')
-nltk.download('stopwords')
-nltk.download('wordnet')
-from nltk.tokenize import word_tokenize
-from nltk.corpus import stopwords
-from nltk.stem.wordnet import WordNetLemmatizer
-
-from sqlalchemy import create_engine
-
-from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
-from sklearn.multioutput import MultiOutputClassifier
-from sklearn.pipeline import Pipeline
-from sklearn.metrics import classification_report, accuracy_score, f1_score, precision_score, recall_score, make_scorer
-from sklearn.utils import resample
-from sklearn.model_selection import GridSearchCV
-
-# load data from database
-engine = create_engine('sqlite:///InsertDatabaseName.db')
-df = pd.read_sql_table('messages_new1', con=engine)
-X = df['message']
-Y = df[list(df.columns[4:])]
-
-# load data from database
-engine = create_engine('sqlite:///InsertDatabaseName.db')
-df = pd.read_sql_table('messages_new1', con=engine)
-X = df['message']
-Y = df[list(df.columns[4:])]
-
 # tokenize the messages
 def tokenize(text):
+
+    """
+    Tokenize function which will be used in CountVectorizer;
+    Steps:
+    (1) lower the case
+    (2) remove punctuations
+    (3) tokenize
+    (4) remove stopwords
+    (5) reduce words to their root form
+    Output is a list of cleaned tokens
+    """
     
     text = text.lower() #lower case
     text = re.sub(r"[^a-zA-Z0-9]", " ", text) #remove punctuations
@@ -53,3 +26,15 @@ def tokenize(text):
 
     return clean_tokens
 
+def average_f1_score(y_test, y_pred):
+
+    """
+    F1 scoring function for Grid Search;
+    Calculates f1 scores for all labels and calculate the average
+    """
+
+    f1_scores = []
+    for i in range(y_pred.shape[1]):
+        f1_scores.append(f1_score(np.array(y_test)[:,i], y_pred[:,i],pos_label='1'))
+    print(f1_scores)
+    return np.mean(f1_scores)

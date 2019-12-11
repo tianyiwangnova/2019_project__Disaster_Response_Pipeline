@@ -65,6 +65,7 @@ def load_data(messages_file_path="messages.csv",
 
 def build_model(clf=RandomForestClassifier(),
                 gridsearch_params={},
+                n_folds=3
                 ):
 
 
@@ -76,20 +77,34 @@ def build_model(clf=RandomForestClassifier(),
     ])
 
     # create gridsearch object and return as final model pipeline
+    f1_scorer = make_scorer(average_f1_score, greater_is_better=True)
+    cv = GridSearchCV(pipeline, 
+                      gridsearch_params, 
+                      scoring=f1_scorer, 
+                      n_jobs=-1, 
+                      cv=n_folds, 
+                      verbose=2)
 
-
-    return model_pipeline
+    return cv
 
 
 def train(X, y, model):
     # train test split
-
+    X_train, X_test, y_train, y_test = train_test_split(X, Y)
 
     # fit model
-
+    begin = datetime.datetime.now()
+    model.fit(X_train, y_train)
+    time_pass = (datetime.datetime.now() - begin).seconds / 60
+    print("running time: {:.2} min".format(time_pass))
+    print("Best params: {}".format(model.best_params_))
+    print("Highest averge f1 score: {}".format(cv_new.best_score_))
 
     # output model test results
+    y_pred = model.predict(X_test)
 
+    for i in range(y_pred.shape[1]):
+        print(classification_report(np.array(y_test)[i,:], y_pred[i,:]))
 
     return model
 

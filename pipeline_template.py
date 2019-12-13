@@ -86,7 +86,7 @@ def build_model(gridsearch_params, n_folds):
 
 def train(X, y, model):
     # train test split
-    X_train, X_test, y_train, y_test = train_test_split(X, Y)
+    X_train, X_test, y_train, y_test = train_test_split(X, y)
 
     # fit model
     begin = datetime.datetime.now()
@@ -127,7 +127,9 @@ if __name__ == '__main__':
     parser.add_argument("--messages_file_path", default="messages.csv", type=str)
     parser.add_argument("--categories_file_path", default="categories.csv", type=str)
     parser.add_argument("--table_name", default="message_table", type=str)
-    parser.add_argument("--gridsearch_params", default={}, type=dict)
+    parser.add_argument("--gridsearch_params", 
+                        default={'clf__estimator__min_samples_split': [5, 10, 15]}, 
+                        type=dict)
     parser.add_argument("--n_folds", default=5, type=int)
 
     args = parser.parse_args()
@@ -139,7 +141,10 @@ if __name__ == '__main__':
     n_folds = args.n_folds
 
     X, y = load_data(messages_file_path, categories_file_path, table_name)
-    print(X.head())
+    print("Shape of X: {}".format(X.shape))
+    cv = build_model(gridsearch_params, n_folds)
+    model = train(X, y, cv)
+    export_model(model)
 
     # run_pipeline(messages_file_path,
     #              categories_file_path,

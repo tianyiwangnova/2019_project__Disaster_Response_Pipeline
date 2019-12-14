@@ -1,4 +1,3 @@
-# import packages
 import argparse
 import datetime
 import pandas as pd
@@ -29,6 +28,9 @@ import pickle
 
 from etl_pipeline import etl
 from ml_pipeline import tokenize, average_f1_score
+
+import warnings
+warnings.filterwarnings('ignore')
 
 
 def load_data(messages_file_path, categories_file_path, table_name):
@@ -77,7 +79,7 @@ def build_model(gridsearch_params, n_folds):
     cv = GridSearchCV(pipeline, 
                       gridsearch_params, 
                       scoring=f1_scorer, 
-                      n_jobs=-1, 
+                      n_jobs=5, 
                       cv=n_folds, 
                       verbose=2)
 
@@ -94,7 +96,7 @@ def train(X, y, model):
     time_pass = (datetime.datetime.now() - begin).seconds / 60
     print("running time: {:.2} min".format(time_pass))
     print("Best params: {}".format(model.best_params_))
-    print("Highest averge f1 score: {}".format(cv_new.best_score_))
+    print("Highest averge f1 score: {}".format(model.best_score_))
 
     # output model test results
     y_pred = model.predict(X_test)

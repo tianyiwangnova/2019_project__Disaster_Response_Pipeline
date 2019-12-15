@@ -1,7 +1,7 @@
 # Disaster Response Pipeline
 
 *Tianyi Wang*
-*2019 Dec 15th*
+<br>*2019 Dec 15th*
 
 This project is a pipeline to clean and tokenize messages sent during disaster events, fit machine learning model (random forest classifier) on the messages and their categories (so the model can classify new messages), and present the analysis on the data and a small message classification application on a website. This project is one of Udacity Data Scientist Nanodegree projects.
 
@@ -15,7 +15,7 @@ Every message sent may belong to one or more categories. There are many categori
 
 ![cat](https://raw.githubusercontent.com/tianyiwangnova/2019_project__Disaster_Response_Pipeline/master/screenshots/categories.png)
 
-Messages and categories are stored in different files. We first combined these two tables and did some data cleaning and stored the table to a [sqlite](https://docs.python.org/3/library/sqlite3.html) databsed. Then we used `MultiOutputClassifie`r and `RandomForestClassifier` in [sklearn](https://scikit-learn.org/stable/) to fit the messages and categories data. 
+Messages and categories are stored in different files. We first combined these two tables and did some data cleaning and stored the table to a [sqlite](https://docs.python.org/3/library/sqlite3.html) database. Then we used `MultiOutputClassifier` and `RandomForestClassifier` in [sklearn](https://scikit-learn.org/stable/) to fit the messages and categories data. 
 
 When tuning the model, we used grid search method on a variety of parameters including `min_samples_split`, `min_samples_leaf` and `max_features`. To handle the data imblanace (some categories have much fewer training samples), we used **f1_score** as the scoing function and we actually saw that model with higher f1 score also has higher accuracy. After we finished grid searching and got the fitted model, we stored the model as a pickle file.
 
@@ -52,7 +52,7 @@ $ python train_model.py --n_jobs=1
 You can actually specify a lot of variables 
  - **messages_file_path**: file path of the message data
  - **categories_file_path**: file path of the categories data
- - **table_name**: name of the combined table; default: message_table
+ - **table_name**: name of the combined table; default: "message_table"
  - **gridsearch_params**: grid search parameters; defalt: `{'clf__estimator__min_samples_split': [5, 10, 15],
                                  'clf__estimator__min_samples_leaf': [1, 3, 5]}`
  - **n_folds**: numbers of cross validation folds; default: 5

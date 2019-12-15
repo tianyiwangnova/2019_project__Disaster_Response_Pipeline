@@ -110,6 +110,7 @@ def average_f1_score(y_test, y_pred):
         f1_scores.append(f1_score(np.array(y_test)[:,i], y_pred[:,i],pos_label='1'))
     return np.mean(f1_scores)
 
+
 def load_data(messages_file_path, categories_file_path, table_name):
 
     """

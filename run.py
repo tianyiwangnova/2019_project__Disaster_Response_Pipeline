@@ -17,6 +17,7 @@ from train_model import *
 
 app = Flask(__name__)
 
+
 def tokenize(text):
 
     """

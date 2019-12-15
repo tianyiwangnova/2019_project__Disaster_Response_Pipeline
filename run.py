@@ -1,6 +1,8 @@
+import argparse
 import json
 import plotly
 import pandas as pd
+from sqlalchemy import create_engine
 
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize
@@ -9,7 +11,6 @@ from flask import Flask
 from flask import render_template, request, jsonify
 from plotly.graph_objs import *
 from sklearn.externals import joblib
-from sqlalchemy import create_engine
 
 from train_model import *
 
@@ -31,9 +32,14 @@ def tokenize(text):
 
     return clean_tokens
 
+#grab the table_name in the argument
+parser=argparse.ArgumentParser()
+parser.add_argument("--table_name", default="message_table", type=str)
+args = parser.parse_args()
+
 # load data
 engine = create_engine('sqlite:///message_classification.db')
-df = pd.read_sql_table('message_table', engine)
+df = pd.read_sql_table(args.table_name, engine)
 
 # load model
 model = joblib.load("model")

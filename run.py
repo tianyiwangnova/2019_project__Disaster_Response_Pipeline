@@ -12,7 +12,7 @@ from flask import render_template, request, jsonify
 from plotly.graph_objs import *
 from sklearn.externals import joblib
 
-from train_model import *
+from train_classifier import *
 
 
 app = Flask(__name__)

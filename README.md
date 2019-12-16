@@ -34,29 +34,37 @@ You can enter a message to classify:
   - **message_classification.db**: sqllite_database where the combined table of the messages and categories sits
   - **model**: we have trained the model (test average f1 scores among categories is 0.2612; test average accuracy: 95.86%) so you can directly run the web app; but you can definitely retrain the model yourself
   - **run.py**: scipts for running the web app 
-  - **train_model.py**: scripts for ETL, fitting machine learning models and saving the data and model
+  - **train_classifier.py**: script for fitting machine learning models and saving the *best* model
+  - **process_data**: scripts for ETL pipeline and load the data into sqlite database
 
 ## How to use it?
 
-To retrain the model, you can run `train_model.py` in the terminal
+To run the ETL pipeline and save the cleaned data to sqlite database, run `process_data.py` in the terminal:
 
 ```sh
-$ python train_model.py
+$ python process_data.py
 ```
-or specify `n_jobs` yourself if you encounter this error `_pickle.PicklingError: Could not pickle the task to send it to the workers.`
+You can specify the following optional variables:
 
-```sh
-$ python train_model.py --n_jobs=1
-```
-
-You can actually specify a lot of variables 
  - **messages_file_path**: file path of the message data
  - **categories_file_path**: file path of the categories data
  - **table_name**: name of the combined table; default: "message_table"
- - **gridsearch_params**: grid search parameters; defalt: `{'clf__estimator__min_samples_split': [5, 10, 15],
-                                 'clf__estimator__min_samples_leaf': [1, 3, 5]}`
+ - **database_file_path**: file path of the sqlite database
+
+To retrain the model, you can run `train_classifier.py` in the terminal
+
+```sh
+$ python train_classifier.py
+```
+
+You can actually specify a lot of variables 
+
+ - **table_name**: name of the combined table; default: "message_table"
+ - **database_file_path**: file path of the sqlite database
+ - **gridsearch_params**: grid search parameters; defalt: `"{'clf__estimator__min_samples_split': [5, 10, 15],
+ 'clf__estimator__min_samples_leaf': [1, 3, 5]}"`; You should pass in the dictionary in a string, the algorithm will convert it to `dict`
  - **n_folds**: numbers of cross validation folds; default: 5
- - **n_jobs**: number of jobs to run in parallel; default: 5
+ - **n_jobs**: number of jobs to run in parallel; default: 1
  
 To run the app, you can run `run.py` in the terminal
 ```sh

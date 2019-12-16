@@ -59,10 +59,12 @@ if __name__ == '__main__':
     table_name = args.table_name
     database_file_path = args.database_file_path
 
+    #read raw data
     messages = pd.read_csv(messages_file_path)
     categories = pd.read_csv(categories_file_path)
     df = messages.merge(categories, on="id")
 
+    #run the etl pipeline 
     df = etl(df)
 
     # load to database

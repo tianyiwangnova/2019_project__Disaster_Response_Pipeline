@@ -166,6 +166,10 @@ def run_pipeline(database_file_path,
                  n_jobs,
                  model_path):
 
+    """
+    Load data, build model, train the model and save the model
+    """
+
     X, y = load_data(database_file_path, table_name)
     print("Shape of X: {}".format(X.shape))
     cv = build_model(gridsearch_params, n_folds, n_jobs)
